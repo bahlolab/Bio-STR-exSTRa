@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/trickytank/Bio-STR-exSTRa.svg?token=pyf8VedruqnDDaNAxxhX&branch=master)](https://travis-ci.com/trickytank/Bio-STR-exSTRa)
+
 # Bio::STR::exSTRa
 
 Perl module and script for summarising repeat motifs from BAM files.
