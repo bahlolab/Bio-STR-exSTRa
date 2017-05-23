@@ -53,7 +53,9 @@ while (<$fg>) {
     if(defined($headcols{Disease})) {
         $locus_note = "At locus $headcols{Disease}, $locus_note";
     }
-
+    
+    # the one test, need more
     is($score_calc, $score_expected, "$locus_note score $score_expected should equal $score_calc (calculated score).\nSeq: $seq\n");
+
 }
 
