@@ -2,20 +2,32 @@
 
 Perl module and script for summarising repeat motifs from BAM files.
 
+# Install requirements
+
+**Perl 5.14.1**
+
+[htslib](https://github.com/samtools/htslib)
+
+Required CPAN modules can be obtained by instructions from the `perl Build.PL` command. 
+
+The CPAN module Bio::DB::HTS requires 
+
 # Setup 
 
-We plan to make this into a buildable module
+Install as a module
+    perl Build.PL
+    ./Build
+    ./Build test
+    ./Build install
 
 To set up, when the working directory is this directory can be achieved with:
 
     export PERL5LIB="$PWD/exSTRa/perl/lib/:$PERL5LIB"
 
 
-Dependencies will need to be installed. You can check what cannot yet be found with:
-
-    perl -c main/exSTRa_score.pl
-
 # Script to process BAM/CRAM files
 
-The script `main/exSTRa_score.pl` can assist with this. See `main/run_strexpansion_score.sh` for an example. 
+At present the script and module requires an XLSX file configuration for repeat disorders. We are changing this to use of a tab delimited file. (TODO: add this file to this repository)
+
+The script `bin/exSTRa_score.pl` can assist with this. See `examples/run_strexpansion_score.sh` for an example. 
 
