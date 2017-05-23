@@ -3,3 +3,13 @@ perl:
   - "5.22"
   - "5.14"
 
+
+ before_install:
+    - git clone -b bioperl-release-1-6-1 --depth 1 https://github.com/bioperl/bioperl-live.git
+    - git clone --branch master --depth 1 https://github.com/Ensembl/ensembl-test.git
+    - git clone --branch master --depth=1 https://github.com/samtools/htslib.git
+    - cd htslib
+    - make prefix=~/biodbhts install
+    - export HTSLIB_DIR=
+    - cd ..
+
