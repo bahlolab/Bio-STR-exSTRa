@@ -1,3 +1,4 @@
+.travis.yml
 bin/exSTRa_score.pl
 Build.PL
 examples/run_strexpansion_score.sh
@@ -5,4 +6,7 @@ lib/Bio/STR/exSTRa.pm
 lib/Bio/STR/exSTRa/Detection.pm
 lib/Bio/STR/exSTRa/Score.pm
 MANIFEST			This list of files
+prepare_BAMs.md
 README.md
+share/repeats_reference.txt
+t/test_score.t
