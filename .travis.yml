@@ -1,7 +1,35 @@
-language: r
-r:
-  - oldrel
-  - release
-  - devel
-cache: packages
+language: "perl"
 
+perl:
+  - "5.22"
+  - "5.18"
+  - "5.14"
+
+services:
+
+env:
+
+sudo: false
+
+addons:
+    apt:
+        packages:
+        - unzip
+
+
+before_install:
+    - eval $(curl https://travis-perl.github.io/init) --auto
+    - cpan-install 'Bio::Perl'
+    # Install Bio::DB::HTS
+    - bash <(curl https://raw.githubusercontent.com/Ensembl/Bio-DB-HTS/master/scripts/build_options.sh) "git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git" "BUILD_LOCAL_INSTALLED_HTSLIB"
+#    - git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git
+#    - cd Bio-DB-HTS
+#    - perl INSTALL.pl
+#    - cd ..
+
+install:
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
