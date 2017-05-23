@@ -21,7 +21,7 @@ my ($tests_passed, $n_tests) = (0, 0);
 my $test_qualloc = '';
 my $qualloc;
 
-open my $fg, '<', '../share/repeats_reference.txt'; #dist_file('Bio::STR::exSTRa', 'repeats_reference.txt');
+open my $fg, '<', 'share/repeats_reference.txt';
 
 while (<$fg>) {
     chomp;
