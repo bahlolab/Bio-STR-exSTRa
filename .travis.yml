@@ -1,10 +1,22 @@
-language: perl
+language: "perl"
+
 perl:
   - "5.22"
+  - "5.18"
   - "5.14"
 
+services:
 
- before_install:
+env:
+
+sudo: false
+
+addons:
+    apt:
+        packages:
+        - unzip
+
+before_install:
     - git clone -b bioperl-release-1-6-1 --depth 1 https://github.com/bioperl/bioperl-live.git
     - git clone --branch master --depth 1 https://github.com/Ensembl/ensembl-test.git
     - git clone --branch master --depth=1 https://github.com/samtools/htslib.git
@@ -13,3 +25,9 @@ perl:
     - export HTSLIB_DIR=
     - cd ..
 
+install:
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
