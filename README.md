@@ -8,24 +8,23 @@ Perl module and script for summarising repeat motifs from BAM files.
 
 **Perl 5.14.1**
 
-[htslib](https://github.com/samtools/htslib)
-
 Required CPAN modules can be obtained by instructions from the `perl Build.PL` command. 
 
-The CPAN module Bio::DB::HTS requires 
+The CPAN module Bio::DB::HTS requires [htslib](https://github.com/samtools/htslib), that may be easier to install separately, or to install [Bio::DB::HTS from Github](https://github.com/Ensembl/Bio-DB-HTS) with one of the options in the `scripts/build_options.sh` script. 
 
 # Setup 
 
 Install as a module
+
     perl Build.PL
     ./Build
     ./Build test
     ./Build install
 
-To set up, when the working directory is this directory can be achieved with:
+# Preparation of BAM files
 
-    export PERL5LIB="$PWD/exSTRa/perl/lib/:$PERL5LIB"
-
+An outline of our analysis pipeline can be viewed at [prepare_BAMs.md](prepare_BAMs.md). 
+We have not yet extensively tested against different aligner settings, but we speculate that the alignments should be performed in local mode. 
 
 # Script to process BAM/CRAM files
 
