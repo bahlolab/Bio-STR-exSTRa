@@ -17,6 +17,7 @@ addons:
         - unzip
 
 before_install:
+    - perl -MCPAN -e 'install Bio::Perl'
     - git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git
     - cd Bio-DB-HTS
     - perl INSTALL.pl
