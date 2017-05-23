@@ -18,7 +18,8 @@ addons:
 
 
 before_install:
-    - cpan-install 'install Bio::Perl'
+    - eval $(curl https://travis-perl.github.io/init) --auto
+    - cpan-install 'Bio::Perl'
     - git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git
     - cd Bio-DB-HTS
     - perl INSTALL.pl
