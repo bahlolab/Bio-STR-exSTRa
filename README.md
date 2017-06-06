@@ -2,7 +2,8 @@
 
 # Bio::STR::exSTRa
 
-Perl module and script for summarising repeat motifs from BAM files.
+Perl module and script for summarising repeat motifs from BAM files, ready for statistical analysis.
+For details of the purpose of this software please see https://github.com/bahlolab/exSTRa
 
 # Install requirements
 

@@ -8,9 +8,9 @@ reference=path/to/hg19.fa
 
 mkdir -p $(dirname $output)
 
-perl exSTRa_score.pl 
+perl exSTRa_score.pl \
     "$reference" \
-    "$repeat_database" 
-    $bams \
+    "$repeat_database" \
+    $bam_glob \
     > "$output 
 
