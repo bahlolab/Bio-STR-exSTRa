@@ -12,10 +12,6 @@ before_install:
     - cpan-install 'Bio::Perl'
     # Install Bio::DB::HTS
     - bash <(curl https://raw.githubusercontent.com/Ensembl/Bio-DB-HTS/master/scripts/build_options.sh) "git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git" "BUILD_LOCAL_INSTALLED_HTSLIB"
-#    - git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git
-#    - cd Bio-DB-HTS
-#    - perl INSTALL.pl
-#    - cd ..
 
 notifications:
   email:
