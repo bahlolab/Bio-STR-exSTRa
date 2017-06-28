@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/bahlolab/Bio-STR-exSTRa.svg)](https://travis-ci.com/bahlolab/Bio-STR-exSTRa)
+[![Build Status](https://travis-ci.com/bahlolab/Bio-STR-exSTRa.svg?token=pyf8VedruqnDDaNAxxhX&branch=master)](https://travis-ci.com/bahlolab/Bio-STR-exSTRa)
 
 # Bio::STR::exSTRa
 
