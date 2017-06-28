@@ -5,17 +5,7 @@ perl:
   - "5.18"
   - "5.14"
 
-services:
-
-env:
-
 sudo: false
-
-addons:
-    apt:
-        packages:
-        - unzip
-
 
 before_install:
     - eval $(curl https://travis-perl.github.io/init) --auto
@@ -26,8 +16,6 @@ before_install:
 #    - cd Bio-DB-HTS
 #    - perl INSTALL.pl
 #    - cd ..
-
-install:
 
 notifications:
   email:
