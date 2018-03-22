@@ -34,8 +34,6 @@ We have not yet extensively tested against different aligner settings, but we sp
 
 The repeat expansion loci are specified in a tab delimited file. 
 This is available in the R [exSTRa package](https://github.com/bahlolab/exSTRa) under `inst/extdata/repeat_expansion_disorders.txt`.
-Either use the file where the R package is installed, or download directly from (https://raw.githubusercontent.com/bahlolab/exSTRa/master/inst/extdata/repeat_expansion_disorders.txt).
+Either use the file where the R package is installed, or download directly from https://raw.githubusercontent.com/bahlolab/exSTRa/master/inst/extdata/repeat_expansion_disorders.txt.
 
-See `examples/run_strexpansion_score.sh` for an example that can be modified to your data.
-This uses the included Perl script `bin/exSTRa_score.pl`, that you will need to set the correct path to.
-
+See `examples/run_strexpansion_score.sh` for an example of running the script `bin/exSTRa_score.pl` that can be modified to your data.
