@@ -514,9 +514,15 @@ sub read_str_database_tsv {
     my %cols;
     while(<$tsv>) {
         chomp;
+
+        # Skip comment lines
+        if(/^#/) {
+            next;
+        }
+
         my @line = split /\t/;
 
-        if($. == 1) {
+        if(@heads == 0) {
             # read header
             @heads = @line;
             @cols{@heads} = (0..$#heads);

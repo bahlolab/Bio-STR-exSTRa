@@ -26,7 +26,6 @@ use Bio::DB::HTS;
 use autodie; 
 use Getopt::Long;
 use Tie::IxHash;
-use Array::Utils qw(array_minus);
 use Data::Dumper; 
 
 $Data::Dumper::Sortkeys = 1; # Dumper outputs are sorted
@@ -72,37 +71,38 @@ if($repeat_database =~ /\.xlsx$/) {
     $input_type = 'named';
 } else {
     # Determine if named or UCSC style file
-    my $is_named_loci = 1;
+    my $is_named_loci = 0;
     open my $rd, '<', $repeat_database or die $!;
-    my $head = <$rd>;
-    chomp $head;
+    my $head;
+    while($head = <$rd>) {
+        chomp $head;
+        if($head =~ /^### exSTRa /) {
+            $is_named_loci = 1;
+        }
+        # Find the first non-comment line (#bin could be from UCSC files)
+        unless ($head =~ /^#/ && $head !~ /^#bin/) {
+            last;
+        }
+    }
     close $rd;
     my @heads = split /\t/, $head;
-
-    if(array_minus ('hg19 chrom', 'hg19 start 0', 'hg19 end', 'Repeat sequence', 
-        'Disease', 'strand'),
-        @heads) {
-            # not all elements are found, so assume it is UCSC style
-            warn "Repeats do not appear to be in named format (required columns not found).\n";
-            $is_named_loci = 0;
-    } 
 
     if($is_named_loci) {
         warn "Tab delimited file of named loci $repeat_database\n";
         $strs->read_str_database_tsv($repeat_database, 
-           (    chrom   => 'hg19 chrom', 
-                start0  => 'hg19 start 0',
-                end     => 'hg19 end', 
-                repeat_unit => 'Repeat sequence',
+           (    chrom   => 'chrom', 
+                start  => 'hg19_start',
+                end     => 'hg19_end', 
+                repeat_unit => 'motif',
                 per_match => 'perMatch',
                 per_indel => 'perIndel',
-                name    => 'Disease',
-                gene    => 'Gene',
-                region  => 'Location of repeat within gene',
+                name    => 'locus',
+                gene    => 'gene',
+                region  => 'location',
                 strand  => 'strand',
-                read_detect_size => 'read_detect_size',
-                stable_repeats => 'Stable repeat number',
-                unstable_repeats => 'Unstable repeat number',
+                # read_detect_size => 'read_detect_size',
+                #stable_repeats => 'Stable repeat number',
+                #unstable_repeats => 'Unstable repeat number',
            ) );
         $input_type = 'named';
     } else {
@@ -115,6 +115,7 @@ if($repeat_database =~ /\.xlsx$/) {
         }
         $strs->keep_repeat_unit_sizes();
         $input_type = 'ucsc';
+    }
 }
 
 # Read BAMs
