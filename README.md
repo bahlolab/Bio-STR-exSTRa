@@ -32,7 +32,8 @@ We have not yet extensively tested against different aligner settings, but we sp
 
 # Script to process BAM/CRAM files
 
-At present the script and module requires an XLSX file configuration for repeat disorders. We are changing this to use of a tab delimited file. For this package only, download the XLSX file from https://github.com/bahlolab/exSTRa/blob/c07a4a6c2ba5d1b953113ab985a62b71796869a9/inst/extdata/exSTRa_repeat_disorders.xlsx
+The repeat expansion loci are specified in a tab delimited file. 
+This is available in the R [exSTRa package](https://github.com/bahlolab/exSTRa) under `inst/extdata/repeat_expansion_disorders.txt`.
+Either use the file where the R package is installed, or download directly from https://raw.githubusercontent.com/bahlolab/exSTRa/master/inst/extdata/repeat_expansion_disorders.txt.
 
-The script `bin/exSTRa_score.pl` can assist with this. See `examples/run_strexpansion_score.sh` for an example. 
-
+See `examples/run_strexpansion_score.sh` for an example of running the script `bin/exSTRa_score.pl` that can be modified to your data.

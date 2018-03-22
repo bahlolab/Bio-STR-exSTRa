@@ -405,10 +405,10 @@ sub read_str_database_UCSC_TRF {
 
 sub read_str_database_excel {
     # Load a database of STRs, we should be able to accept multiple formats.
-    # This method will accept multiple tab delimted inputs, provided the column
+    # This method will accept XLSX inputs, provided the column
     # names are specified.
     # Usage: 
-    #   $strdb->read_str_database_tab("file.xlsx", %feature_names);
+    #   $strdb->read_str_database_excel("file.xlsx", %feature_names);
     # where %feature names has key=attribute name, value=header name. start0 may also be used
     my $self = shift; 
     my $excel_file = shift;
@@ -490,6 +490,94 @@ sub read_str_database_excel {
      unless($strs_imported) {
         die "No STRs were imported";
      }
+}
+
+
+sub read_str_database_tsv {
+    # Load a database of STRs, we should be able to accept multiple formats.
+    # This method will accept multiple tab delimted inputs, provided the column
+    # names are specified.
+    # Usage: 
+    #   $strdb->read_str_database_tsv("file.txt", %feature_names);
+    # where %feature names has key=attribute name, value=header name. start0 may also be used
+    my $self = shift; 
+    my $tsv_file = shift;
+    my %feature_names = @_;
+    my $read_detect_in_file = defined($feature_names{read_detect_size});
+    if(%{$self->strs} ne 0) {
+        die "Trying to load STR database twice, not allowed.\n";
+    }
+
+    open my $tsv, '<', $tsv_file or die $!;
+
+    my @heads;
+    my %cols;
+    while(<$tsv>) {
+        chomp;
+
+        # Skip comment lines
+        if(/^#/) {
+            next;
+        }
+
+        my @line = split /\t/;
+
+        if(@heads == 0) {
+            # read header
+            @heads = @line;
+            @cols{@heads} = (0..$#heads);
+            unless (all {defined} @cols{(values %feature_names)}) {
+                warn "When importing STRs for file $tsv_file,\n not all specified columns were found.\n";
+                warn "Input column names and column number:\n";
+                warn ((Dumper \%cols). "\n");
+                warn "Bio::STR::exSTRa class attribute names and names we expect to find in tsv file:\n";
+                warn ((Dumper \%feature_names). "\n");
+                exit "STRs not imported.\n"
+            }
+            next;
+        }
+
+        # Read body
+        my $str = exSTRa->new(compound_strs_allowed => $self->compound_strs_allowed);
+        for my $feat (keys %feature_names) {
+            my $cvalue = $line[$cols{$feature_names{$feat}}];
+            if (defined $cvalue) {
+                if($feat eq 'start0' && $cvalue =~ /^\d+$/) {
+                    $str->{start} = $cvalue + 1;
+                } else {
+                    $str->{$feat} = $cvalue;
+                }
+            } 
+        }
+
+        # Check STR has a location
+        unless (defined($str->{chrom}) && defined($str->{start}) && defined($str->{end}) && defined($str->{repeat_unit})) {
+            warn "When importing STRs for $tsv_file,\nrow " . ($.) . " skipped.\n";
+            no warnings; 
+            warn "Values found that were required were: Chrom: $str->{chrom}, start: $str->{start}, end: $str->{end}, repeat_unit: $str->{repeat_unit}\n";
+            use warnings; 
+            next;
+        }
+
+        # mark read detect info as emperical if required
+        if($read_detect_in_file) {
+            $str->{read_detect_size_is_empirical} = '';
+        }
+
+        # Write the STR to the hash
+        my $key = "$str->{chrom}:$str->{start}-$str->{end}:$str->{repeat_unit}";
+        die "Repeated location of repeat at location $key" if defined($self->strs->{$key});
+        $str->repeat_unit_canonical; # Generate this value as it's normally lazy
+        $self->strs->{$key} = $str; # Add STR to hash
+        if (defined($str->{name})) { $self->strs_by_name->{$str->{name}} = $str; }
+        if (defined($str->{gene})) { $self->strs_by_gene->{$str->{gene}} = $str; }
+    }
+
+    my $strs_imported = scalar(keys %{$self->strs});
+    warn "STRs imported: $strs_imported\n";
+    unless($strs_imported) {
+       die "No STRs were imported";
+    }
 }
 
 sub keep_repeat_unit_sizes {
