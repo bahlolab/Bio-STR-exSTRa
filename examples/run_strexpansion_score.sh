@@ -12,5 +12,5 @@ perl exSTRa_score.pl \
     "$reference" \
     "$repeat_database" \
     $bam_glob \
-    > "$output 
+    > "$output"
 
