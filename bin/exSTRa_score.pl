@@ -6,29 +6,15 @@ to the STR expansion disease loci. Counts the number of repeated bases
 in reads found. 
 
 Usage: 
-perl exSTRa_score.pl  $bahlolab_db/hg19/standard_gatk/hg19.fa ../../../disorders/repeat_disorders.xlsx sample.bam [sample2.bam] [...]
+perl exSTRa_score.pl $bahlolab_db/hg19/standard_gatk/hg19.fa ../../../disorders/repeat_disorders.txt sample.bam [sample2.bam] [...]
 
 Testing:
-perl exSTRa_score.pl  --debug $bahlolab_db/hg19/standard_gatk/hg19.fa ../../../disorders/repeat_disorders.xlsx ../simulations/*1/pipeline/initial_*_pipeline/bam_recal/*_bowtie2_recal.bam
+perl exSTRa_score.pl --debug $bahlolab_db/hg19/standard_gatk/hg19.fa ../../../disorders/repeat_disorders.txt ../simulations/*1/pipeline/initial_*_pipeline/bam_recal/*_bowtie2_recal.bam
 
 Actual Usage: 
-perl exSTRa_score.pl $bahlolab_db/hg19/standard_gatk/hg19.fa ../disorders/repeat_disorders.xlsx bam_links/*.bam > repeat_rediscovery_02_readdetect.txt
+perl exSTRa_score.pl $bahlolab_db/hg19/standard_gatk/hg19.fa ../disorders/repeat_disorders.txt bam_links/*.bam > repeat_rediscovery_02_readdetect.txt
 
-perl exSTRa_score.pl --by_alignment $bahlolab_db/hg19/standard_gatk/hg19.fa ../disorders/repeat_disorders.xlsx bam_links/*.bam > repeat_rediscovery_02_byalignment.txt
-
-=head1 TODO
-
-Add feature counts around the STRs only, especially with respect to length. 
-Get length changing mean and std.dev for spanning reads
-Add results from:
-
-- lobSTR
-
-- reviSTR
-
-- RepeatSeq
-
-- STRViper
+perl exSTRa_score.pl --by_alignment $bahlolab_db/hg19/standard_gatk/hg19.fa ../disorders/repeat_disorders.txt bam_links/*.bam > repeat_rediscovery_02_byalignment.txt
 
 =cut
 
@@ -40,6 +26,7 @@ use Bio::DB::HTS;
 use autodie; 
 use Getopt::Long;
 use Tie::IxHash;
+use Array::Utils qw(array_minus);
 use Data::Dumper; 
 
 $Data::Dumper::Sortkeys = 1; # Dumper outputs are sorted
@@ -82,19 +69,52 @@ if($repeat_database =~ /\.xlsx$/) {
             stable_repeats => 'Stable repeat number',
             unstable_repeats => 'Unstable repeat number',
        ) );
-    $input_type = 'xlsx';
+    $input_type = 'named';
 } else {
-    warn "Importing repeats assuming UCSC Simple Repeat style, from file $repeat_database.\n";
+    # Determine if named or UCSC style file
+    my $is_named_loci = 1;
     open my $rd, '<', $repeat_database or die $!;
     my $head = <$rd>;
+    chomp $head;
     close $rd;
-    if($head =~ /^#bin\tchrom/) {
-        $strs->read_str_database_UCSC_TRF($repeat_database);
+    my @heads = split /\t/, $head;
+
+    if(array_minus ('hg19 chrom', 'hg19 start 0', 'hg19 end', 'Repeat sequence', 
+        'Disease', 'strand'),
+        @heads) {
+            # not all elements are found, so assume it is UCSC style
+            warn "Repeats do not appear to be in named format (required columns not found).\n";
+            $is_named_loci = 0;
+    } 
+
+    if($is_named_loci) {
+        warn "Tab delimited file of named loci $repeat_database\n";
+        $strs->read_str_database_tsv($repeat_database, 
+           (    chrom   => 'hg19 chrom', 
+                start0  => 'hg19 start 0',
+                end     => 'hg19 end', 
+                repeat_unit => 'Repeat sequence',
+                per_match => 'perMatch',
+                per_indel => 'perIndel',
+                name    => 'Disease',
+                gene    => 'Gene',
+                region  => 'Location of repeat within gene',
+                strand  => 'strand',
+                read_detect_size => 'read_detect_size',
+                stable_repeats => 'Stable repeat number',
+                unstable_repeats => 'Unstable repeat number',
+           ) );
+        $input_type = 'named';
     } else {
-        $strs->read_str_database_UCSC_TRF($repeat_database, 0, 1);
-    }
-    $strs->keep_repeat_unit_sizes();
-    $input_type = 'ucsc';
+        # UCSC Simple Repeat style
+        warn "Importing repeats assuming UCSC Simple Repeat style, from file $repeat_database.\n";
+        if($head =~ /^#bin\tchrom/) {
+            $strs->read_str_database_UCSC_TRF($repeat_database);
+        } else {
+            $strs->read_str_database_UCSC_TRF($repeat_database, 0, 1);
+        }
+        $strs->keep_repeat_unit_sizes();
+        $input_type = 'ucsc';
 }
 
 # Read BAMs
