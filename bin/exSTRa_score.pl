@@ -21,7 +21,7 @@ perl exSTRa_score.pl --by_alignment $bahlolab_db/hg19/standard_gatk/hg19.fa ../d
 use 5.014;
 use strict 'vars';
 use warnings; 
-use Bio::STR::exSTRa 1.0.0; 
+use Bio::STR::exSTRa 1.0.1; 
 use Bio::DB::HTS;
 use autodie; 
 use Getopt::Long;
