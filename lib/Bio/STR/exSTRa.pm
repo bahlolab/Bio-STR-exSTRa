@@ -21,7 +21,7 @@ use Carp;
 our(@ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS, $VERSION);
 
 use Exporter; 
-$VERSION = 1.0.0;
+$VERSION = 1.0.1;
 @ISA = qw(Exporter); 
 
 @EXPORT     = qw ();
@@ -378,7 +378,7 @@ sub read_str_database_UCSC_TRF {
     while(<STRDB>) {
         chomp;
         my @line = split(/\t/);
-        my $str = STR->new(compound_strs_allowed => $self->compound_strs_allowed);
+        my $str = exSTRa->new(compound_strs_allowed => $self->compound_strs_allowed);
         ++$line[$coli{'chromStart'}]; # account for 0-based coordinates
         foreach my $internal (keys %data_2_internal) {
             $str->{$data_2_internal{$internal}} = $line[$coli{$internal}];
