@@ -21,7 +21,7 @@ use Carp;
 our(@ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS, $VERSION);
 
 use Exporter; 
-$VERSION = 1.0.1;
+$VERSION = 1.0.2;
 @ISA = qw(Exporter); 
 
 @EXPORT     = qw ();
@@ -875,7 +875,7 @@ sub all_counts_print {
     my $all_counts = $self->counts;
     my $str_name_col_head = 'locus'; #TODO: should this depend on whether this is a disease or not?
     # Print header
-    my @datacols = keys ((each ((each $all_counts)[1]))[1]);
+    my @datacols = keys %{ ((each %{ ((each %{ $all_counts } )[1]) } )[1]) };
     # Header: sample, locus, data 
     say join("\t", ('sample', $str_name_col_head, @datacols));
     
@@ -1507,7 +1507,7 @@ sub _find_mate {
             warn "Could not find any mate for read " . $read1->name . "\n";
             return undef;
         } else {
-            die "Multiple mates found for read " . $read1->name . "\n";
+            die "Error: Multiple mates found for read " . $read1->name . "\n";
         }
     }
     return $reads2[0];
