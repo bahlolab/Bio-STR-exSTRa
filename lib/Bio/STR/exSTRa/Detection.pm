@@ -251,6 +251,7 @@ sub verify_repeat_found {
     return($result);
 }
 
+no warnings;
 sub qualloc {
     # give a qualitative location for the STR
     # if given an argument then this should be a number corresponding to the number of bases
@@ -268,6 +269,7 @@ sub qualloc {
         default { return 'NA' } 
     }
 }
+use warnings;
 
 sub rep_in_read {
     # Give the bases of non-repeat, repeat then repeat in a read
