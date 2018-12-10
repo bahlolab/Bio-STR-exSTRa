@@ -8,8 +8,6 @@ perl:
   
 os:
   - linux
-  - windows
-  - osx
 
 sudo: false
 
