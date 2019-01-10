@@ -47,6 +47,4 @@ This is available in the R [exSTRa package](https://github.com/bahlolab/exSTRa) 
 Either use the file where the R package is installed, or download directly: [repeat_expansion_disorders.txt](https://raw.githubusercontent.com/bahlolab/exSTRa/master/inst/extdata/repeat_expansion_disorders.txt).
 
 See [`examples/run_strexpansion_score.sh`](examples/run_strexpansion_score.sh) for an example of running the script [`bin/exSTRa_score.pl`](bin/exSTRa_score.pl) that can be modified to your data. 
-The Docker container runs `exSTRa_score.pl` as an entry point, therefore arguments after `ricktankard/bio-str-exstra:latest` should be as for the `exSTRa_score.pl` script.
-
-
+The Docker container has `exSTRa_score.pl` as an executable command. 
