@@ -635,8 +635,12 @@ sub read_bams_array {
             -bam => $bam_file,
             -autoindex => 1,
         );
-        $bam->header->text =~ /\tSM:([^\t]+)\t/;
-        my $sample_name = $1;
+        my $sample_name;
+        if($bam->header->text =~ /\@RG.*\tSM:([^\t\n]+)[\t\n]/) {
+            $sample_name = $1;
+        } else {
+            $sample_name = $bam_file;
+        }
         $self->read_bams({ $sample_name => $bam_file }, @_);
     }
 }
