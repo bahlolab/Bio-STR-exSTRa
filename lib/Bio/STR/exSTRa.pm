@@ -21,7 +21,7 @@ use Carp;
 our(@ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS, $VERSION);
 
 use Exporter; 
-$VERSION = 1.0.2;
+$VERSION = 1.0.3;
 @ISA = qw(Exporter); 
 
 @EXPORT     = qw ();
@@ -635,8 +635,12 @@ sub read_bams_array {
             -bam => $bam_file,
             -autoindex => 1,
         );
-        $bam->header->text =~ /\tSM:([^\t]+)\t/;
-        my $sample_name = $1;
+        my $sample_name;
+        if($bam->header->text =~ /\@RG.*\tSM:([^\t\n]+)/) {
+            $sample_name = $1;
+        } else {
+            $sample_name = $bam_file;
+        }
         $self->read_bams({ $sample_name => $bam_file }, @_);
     }
 }
