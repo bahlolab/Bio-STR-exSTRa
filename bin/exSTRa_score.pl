@@ -5,6 +5,8 @@ Extracting important information from aligned reads with respect
 to the STR expansion disease loci. Counts the number of repeated bases 
 in reads found. 
 
+version 1.1.0
+
 Usage: 
 perl exSTRa_score.pl $bahlolab_db/hg19/standard_gatk/hg19.fa ../../../disorders/repeat_disorders.txt sample.bam [sample2.bam] [...]
 
