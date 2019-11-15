@@ -27,13 +27,22 @@ https://hub.docker.com/r/ricktankard/bio-str-exstra
 
 Install as a module:
 
+    # Install Bio::Perl if not installed already (assumes CPAN Minus is available)
+    cpanm 'Bio::Perl'
+
     perl Build.PL
+    ./Build installdeps # This is as suggested by the previous command - the command for you to run may vary.
     ./Build
     ./Build test
     ./Build install
 
 If you do not have write access to the Perl module directory, you may need to use the local::lib module. 
 In some circumstances these commands may still not work, and you may need to seek help on Perl's Module::Build. 
+
+If Bio::DB::HTS has trouble installing, first check that [htslib](https://github.com/samtools/htslib) is fully installed. 
+I have also had success installing it (after installing Bio::Perl) with this command:
+
+    bash <(curl https://raw.githubusercontent.com/Ensembl/Bio-DB-HTS/master/scripts/build_options.sh) "git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git" "BUILD_LOCAL_INSTALLED_HTSLIB"
 
 # Preparation of BAM files
 
