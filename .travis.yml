@@ -6,7 +6,11 @@ perl:
   - "5.22"
   - "5.18"
   - "5.14"
-  
+
+allow_failures:
+  perl:
+    - "5.18"
+    - "5.14"
 os:
   - linux
 
