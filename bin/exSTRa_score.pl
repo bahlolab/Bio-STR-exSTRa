@@ -93,11 +93,11 @@ if($repeat_database =~ /\.xlsx$/) {
         # There should only be one of each.
         my @start_names = grep { /start$/ } @heads;
         my @end_names = grep { /end$/ } @heads;
-        if(@start_names != 1 && @end_names != 1) {
+        if(@start_names != 1 || @end_names != 1) {
             die "There was not exactly one '*start' column and '*end' column.\n" .
-            "Note that any column name that ends with 'start' or 'end' respectively will match.\n" .
-            "start columns: " . join(", ", @start_names) .
-            "end columns: " . join(", ", @end_names) .
+            "Note that any column name that ends with 'start' or 'end' respectively will match." .
+            "\nstart columns: " . join(", ", @start_names) .
+            "\nend columns: " . join(", ", @end_names) .
             "\n";
         }
 
