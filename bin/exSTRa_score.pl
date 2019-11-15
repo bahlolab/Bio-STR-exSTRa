@@ -91,8 +91,8 @@ if($repeat_database =~ /\.xlsx$/) {
         warn "Tab delimited file of named loci $repeat_database\n";
         # Find start and end header names.
         # There should only be one of each.
-        my @start_names = grep { /start$/ } @head;
-        my @end_names = grep { /end$/ } @head;
+        my @start_names = grep { /start$/ } @heads;
+        my @end_names = grep { /end$/ } @heads;
         if(@start_names != 1 && @end_names != 1) {
             die "There was not exactly one '*start' column and '*end' column.\n" .
             "Note that any column name that ends with 'start' or 'end' respectively will match.\n" .
