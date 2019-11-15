@@ -8,9 +8,9 @@ perl:
   - "5.14"
 
 allow_failures:
-  perl:
-    - "5.18"
-    - "5.14"
+  - perl: "5.18"
+  - perl: "5.14"
+
 os:
   - linux
 
@@ -26,3 +26,6 @@ notifications:
   email:
     on_success: always
     on_failure: always
+
+jobs:
+  fast_finish: true
