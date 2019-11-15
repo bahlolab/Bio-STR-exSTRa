@@ -89,10 +89,22 @@ if($repeat_database =~ /\.xlsx$/) {
 
     if($is_named_loci) {
         warn "Tab delimited file of named loci $repeat_database\n";
+        # Find start and end header names.
+        # There should only be one of each.
+        my @start_names = grep { /start$/ } @head;
+        my @end_names = grep { /end$/ } @head;
+        if(@start_names != 1 && @end_names != 1) {
+            die "There was not exactly one '*start' column and '*end' column.\n" .
+            "Note that any column name that ends with 'start' or 'end' respectively will match.\n" .
+            "start columns: " . join(", ", @start_names) .
+            "end columns: " . join(", ", @end_names) .
+            "\n";
+        }
+
         $strs->read_str_database_tsv($repeat_database, 
            (    chrom   => 'chrom', 
-                start  => 'hg19_start',
-                end     => 'hg19_end', 
+                start  => $start_names[0],
+                end     => $end_names[0],
                 repeat_unit => 'motif',
                 per_match => 'perMatch',
                 per_indel => 'perIndel',
@@ -103,7 +115,8 @@ if($repeat_database =~ /\.xlsx$/) {
                 # read_detect_size => 'read_detect_size',
                 #stable_repeats => 'Stable repeat number',
                 #unstable_repeats => 'Unstable repeat number',
-           ) );
+           )
+        );
         $input_type = 'named';
     } else {
         # UCSC Simple Repeat style
@@ -163,4 +176,3 @@ sub give_seq_counts {
 
 
 }
-
