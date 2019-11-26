@@ -9,9 +9,9 @@ For details of the purpose of this software please see https://github.com/bahlol
 
 **Perl 5.14.1**
 
-Required CPAN modules can be obtained by instructions from the `perl Build.PL` command. 
-
 The CPAN module Bio::DB::HTS requires [htslib](https://github.com/samtools/htslib), that may be easier to install separately, or to install [Bio::DB::HTS from Github](https://github.com/Ensembl/Bio-DB-HTS) with one of the options in the `scripts/build_options.sh` script. 
+
+Required CPAN modules can be obtained by instructions from the `perl Build.PL` command. 
 
 # Setup 
 
@@ -26,6 +26,8 @@ https://hub.docker.com/r/ricktankard/bio-str-exstra
 ## Perl library install
 
 Install as a module:
+
+    # Assumes htslib is already installed. See Install Requirements section above.
 
     # Install Bio::Perl if not installed already (assumes CPAN Minus is available)
     cpanm 'Bio::Perl'
