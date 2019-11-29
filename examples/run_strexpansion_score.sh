@@ -18,9 +18,6 @@ repeat_database=path/to/repeat_expansion_disorders_hg19.txt
 # Reference FASTA file, the same reference as the BAM files and repeat_database:
 reference=path/to/hg19.fa
 
-# exSTRa_score.pl path
-exstra_score="bin/exSTRa_score.pl"
-
 ### Running ###
 mkdir -p $(dirname $output)
 
