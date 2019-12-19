@@ -9,9 +9,9 @@ For details of the purpose of this software please see https://github.com/bahlol
 
 **Perl 5.14.1**
 
-Required CPAN modules can be obtained by instructions from the `perl Build.PL` command. 
-
 The CPAN module Bio::DB::HTS requires [htslib](https://github.com/samtools/htslib), that may be easier to install separately, or to install [Bio::DB::HTS from Github](https://github.com/Ensembl/Bio-DB-HTS) with one of the options in the `scripts/build_options.sh` script. 
+
+Required CPAN modules can be obtained by instructions from the `perl Build.PL` command. 
 
 # Setup 
 
@@ -27,13 +27,24 @@ https://hub.docker.com/r/ricktankard/bio-str-exstra
 
 Install as a module:
 
+    # Assumes htslib is already installed. See Install Requirements section above, or below for some installation tips.
+
+    # Install Bio::Perl if not installed already (assumes CPAN Minus is available)
+    cpanm 'Bio::Perl'
+
     perl Build.PL
+    ./Build installdeps # This is as suggested by the previous command - the command for you to run may vary.
     ./Build
     ./Build test
     ./Build install
 
 If you do not have write access to the Perl module directory, you may need to use the local::lib module. 
 In some circumstances these commands may still not work, and you may need to seek help on Perl's Module::Build. 
+
+If Bio::DB::HTS has trouble installing, first check that [htslib](https://github.com/samtools/htslib) is properly installed including lib paths. 
+For local installs, we have had success installing it (after installing Bio::Perl) with the following command:
+
+    bash <(curl https://raw.githubusercontent.com/Ensembl/Bio-DB-HTS/master/scripts/build_options.sh) "git clone --branch master --depth=1 https://github.com/Ensembl/Bio-DB-HTS.git" "BUILD_LOCAL_INSTALLED_HTSLIB"
 
 # Preparation of BAM files
 
@@ -43,8 +54,8 @@ We have not yet extensively tested against different aligner settings, but we sp
 # Script to process BAM/CRAM files
 
 The repeat expansion loci are specified in a tab delimited file. 
-This is available in the R [exSTRa package](https://github.com/bahlolab/exSTRa) under `inst/extdata/repeat_expansion_disorders.txt`.
-Either use the file where the R package is installed, or download directly: [repeat_expansion_disorders.txt](https://raw.githubusercontent.com/bahlolab/exSTRa/master/inst/extdata/repeat_expansion_disorders.txt).
+This is available in the R [exSTRa package](https://github.com/bahlolab/exSTRa) under `inst/extdata/repeat_expansion_disorders_hg19.txt` or `inst/extdata/repeat_expansion_disorders_grch37.txt`, with hg38 and GRCh38 files coming soon.
+Either use the file where the R package is installed, or download directly: [repeat_expansion_disorders_hg19.txt](https://raw.githubusercontent.com/bahlolab/exSTRa/master/inst/extdata/repeat_expansion_disorders_hg19.txt) or [repeat_expansion_disorders_grch37.txt](https://raw.githubusercontent.com/bahlolab/exSTRa/master/inst/extdata/repeat_expansion_disorders_grch37.txt).
 
 See [`examples/run_strexpansion_score.sh`](examples/run_strexpansion_score.sh) for an example of running the script [`bin/exSTRa_score.pl`](bin/exSTRa_score.pl) that can be modified to your data. 
 The Docker container has `exSTRa_score.pl` as an executable command. 

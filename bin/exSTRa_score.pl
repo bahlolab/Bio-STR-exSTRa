@@ -5,6 +5,8 @@ Extracting important information from aligned reads with respect
 to the STR expansion disease loci. Counts the number of repeated bases 
 in reads found. 
 
+version 1.1.0
+
 Usage: 
 perl exSTRa_score.pl $bahlolab_db/hg19/standard_gatk/hg19.fa ../../../disorders/repeat_disorders.txt sample.bam [sample2.bam] [...]
 
@@ -89,10 +91,22 @@ if($repeat_database =~ /\.xlsx$/) {
 
     if($is_named_loci) {
         warn "Tab delimited file of named loci $repeat_database\n";
+        # Find start and end header names.
+        # There should only be one of each.
+        my @start_names = grep { /start$/ } @heads;
+        my @end_names = grep { /end$/ } @heads;
+        if(@start_names != 1 || @end_names != 1) {
+            die "There was not exactly one '*start' column and '*end' column.\n" .
+            "Note that any column name that ends with 'start' or 'end' respectively will match." .
+            "\nstart columns: " . join(", ", @start_names) .
+            "\nend columns: " . join(", ", @end_names) .
+            "\n";
+        }
+
         $strs->read_str_database_tsv($repeat_database, 
            (    chrom   => 'chrom', 
-                start  => 'hg19_start',
-                end     => 'hg19_end', 
+                start  => $start_names[0],
+                end     => $end_names[0],
                 repeat_unit => 'motif',
                 per_match => 'perMatch',
                 per_indel => 'perIndel',
@@ -103,7 +117,8 @@ if($repeat_database =~ /\.xlsx$/) {
                 # read_detect_size => 'read_detect_size',
                 #stable_repeats => 'Stable repeat number',
                 #unstable_repeats => 'Unstable repeat number',
-           ) );
+           )
+        );
         $input_type = 'named';
     } else {
         # UCSC Simple Repeat style
@@ -163,4 +178,3 @@ sub give_seq_counts {
 
 
 }
-

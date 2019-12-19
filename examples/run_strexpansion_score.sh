@@ -13,19 +13,16 @@ output=output/exSTRa_scores.txt
 
 # As provided from the R exSTRa package (https://github.com/bahlolab/exSTRa).
 # Check that the reference matches your BAM files.
-repeat_database=path/to/repeat_expansion_disorders.txt
+repeat_database=path/to/repeat_expansion_disorders_hg19.txt
 
-# Reference FASTA file, the same as BAM files:
+# Reference FASTA file, the same reference as the BAM files and repeat_database:
 reference=path/to/hg19.fa
-
-# exSTRa_score.pl path
-exstra_score="bin/exSTRa_score.pl"
 
 ### Running ###
 mkdir -p $(dirname $output)
 
-# Please set the correct path for the exSTRa_score.pl script
-perl "$exstra_score" \
+# If exSTRa_score.pl script is not available in your PATH, you may instead use: perl path/to/exSTRa_score.pl
+exSTRa_score.pl \
     "$reference" \
     "$repeat_database" \
     $bam_glob \
