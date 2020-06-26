@@ -97,7 +97,7 @@ if($repeat_database =~ /\.xlsx$/) {
         my @end_names = grep { /end$/i } @heads;
         if(@start_names != 1 || @end_names != 1) {
             die "There was not exactly one '*start' column and '*end' column.\n" .
-            "Note that any column name that ends with 'start' or 'end' respectively (case insensitive) will match." .
+            "Note that any column name that ends with 'start' or 'end' respectively (case-insensitive) will match." .
             "\nstart columns: " . join(", ", @start_names) .
             "\nend columns: " . join(", ", @end_names) .
             "\n";
