@@ -187,9 +187,9 @@ sub canonical_seq {
     $seq_rev =~ tr/ACGT/TGCA/;
     my $lowest = $seq;
     for(my $i=0; $i < length($seq); $i++) {
-        my $foroard = (substr $seq, $i) . (substr $seq, 0, $i);
+        my $forward = (substr $seq, $i) . (substr $seq, 0, $i);
         my $reverse = (substr $seq_rev, $i) . (substr $seq_rev, 0, $i);
-        if($foroard lt $lowest) { $lowest = $foroard };
+        if($forward lt $lowest) { $lowest = $forward };
         if($reverse lt $lowest) { $lowest = $reverse };
     }
     $lowest;
