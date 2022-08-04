@@ -21,7 +21,7 @@ use Carp;
 our(@ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS, $VERSION);
 
 use Exporter; 
-$VERSION = 1.1.0;
+$VERSION = 1.2.0;
 @ISA = qw(Exporter); 
 
 @EXPORT     = qw ();
@@ -1276,6 +1276,7 @@ use namespace::autoclean;
 extends 'exSTRa::ReadLocation';
 use Bio::STR::exSTRa::Detection;
 use Bio::STR::exSTRa::Score;
+use Data::Dumper;
 # use Bio::DB::HTS::AlignWrapper;
 
 # Attributes of exSTRa::ReadLocation::ReadInspect
@@ -1329,6 +1330,7 @@ sub determine_location_se {
                                                  -seq_id => $self->str->{chrom},
                                                  -start  => $min_start - $pad_distance,
                                                  -end    => $max_end + $pad_distance,
+                                                 -flags=>{NOT_PRIMARY=>0}, # Only get primary alignments
                                                  );
     my $str_start = $self->str->start;
     my $str_end = $self->str->end;
@@ -1478,6 +1480,10 @@ sub _find_mate {
     my $origin = \$_[1]; # can be un(mapped), mis(mapped), ok
     #warn "    Finding mate for read " . $read1->name . "\n"; #TODO: verbose only
     my @reads2;
+    if($read1->get_tag_values('NOT_PRIMARY')) {
+        # Read is not the primary alignment, so skip.
+        return undef;
+    }
     if($read1->get_tag_values('M_UNMAPPED')) {
         # mate is unmapped, go find it!
         # something to do with $read1->name
@@ -1489,6 +1495,7 @@ sub _find_mate {
             -seq_id => $read1->seq_id,
             -start => $read1->start,
             -end => $read1->start,
+            -flags=>{NOT_PRIMARY=>0}, # Only get primary alignments
         );
         $$origin = 'un';
     } else {
@@ -1500,18 +1507,29 @@ sub _find_mate {
             -seq_id => $read1->mate_seq_id,
             -start => $read1->mate_start,
             -end => $read1->mate_start,
+            -flags=>{NOT_PRIMARY=>0}, # Only get primary alignments
         );
         # Don't accidently keep the original read (assuming it doesn't have the exact same start position)
         # If this same position occurs, we may have to look at the tag value directly
         @reads2 = grep { $_->start == $read1->mate_start } @reads2;
         $$origin = 'mis';
     }
+    # Filter out non-primary alignments
+    @reads2 = grep { ! $_->get_tag_values('NOT_PRIMARY') } @reads2;
+    # only keep the opposite of the first mate
+    @reads2 = grep { $_->get_tag_values('FIRST_MATE') != $read1->get_tag_values('FIRST_MATE') } @reads2;
+    # Check we only have one alignment
     unless(@reads2 == 1) {
         if(@reads2 == 0) {
             warn "Could not find any mate for read " . $read1->name . "\n";
             return undef;
         } else {
-            die "Error: Multiple mates found for read " . $read1->name . "\n";
+            # still multiple hits, check the sequences are all the same
+            my $dna_string = $reads2[0]->query->dna;
+            if((grep { $_->query->dna ne $dna_string } @reads2) > 0) {
+                #warn Data::Dumper->Dump(\@reads2) . "\n";
+                die "Error: Multiple mates found for read " . $read1->name . "\n";
+            }
         }
     }
     return $reads2[0];
