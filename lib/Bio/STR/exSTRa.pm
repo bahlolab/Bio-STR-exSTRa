@@ -1086,7 +1086,7 @@ sub determine_location_se {
                 $key .= '2';
             }
         }
-        if (!exists($self->{$key})) { warn "No paired value for key $key." };
+        if (!exists($self->{$key})) { warn "    No paired value for key $key." };
         push @{$self->{$key}}, $r;
     }
 }
@@ -1133,7 +1133,7 @@ sub determine_location_pe {
             $start2 = 'x';
             $end2 = 'x';
             unless($start1 < $end1) {
-                 warn "Read location is not as expected and being skipped. \$start1=$start1, \$end1=$end1, unpaired read.";
+                 warn "    Read location is not as expected and being skipped. \$start1=$start1, \$end1=$end1, unpaired read.";
                  next;
             }
         } else { 
@@ -1244,14 +1244,14 @@ sub _quality_filter {
                 # Both reads marked as a duplicate
                 return 1;
             } else {
-                warn "WARNING: only first (chromosome position) read is marked as duplicate for read ". $first_mate->name ."\n";
+                warn "    WARNING: only first (chromosome position) read is marked as duplicate for read ". $first_mate->name ."\n";
             }
         } else {
             # The one mapped read has been marked as a duplicate
             return 1;
         }
     } elsif (defined($second_mate) && $second_mate->get_tag_values('DUPLICATE')) {
-        warn "WARNING: only second (chromosome position) read is marked as duplicate for read ". $second_mate->name ."\n";
+        warn "    WARNING: only second (chromosome position) read is marked as duplicate for read ". $second_mate->name ."\n";
     }
     # Filter out reads with low mapping quality for both ends:
     #TODO: make $qual_threshold be setable from outside module
@@ -1521,7 +1521,7 @@ sub _find_mate {
     # Check we only have one alignment
     unless(@reads2 == 1) {
         if(@reads2 == 0) {
-            warn "Could not find any mate for read " . $read1->name . "\n";
+            warn "    Could not find any mate for read " . $read1->name . "\n";
             return undef;
         } else {
             # still multiple hits, check the sequences are all the same
