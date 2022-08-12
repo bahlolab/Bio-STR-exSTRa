@@ -683,10 +683,14 @@ sub assess_str_reads_by_readinspect {
     my $read_trim_static = $inputs{read_trim_static} // 10; # how many bp to trim reads from both ends in qualloc
     my $print_only = $inputs{print_only} // 0;
     my $print_read_name = $inputs{print_read_name} // 1;
+    my $out_id = $inputs{out_id} // ''; # Alternative output ID
     warn "The options to assess_str_reads_by_readinspect are:\n";
     warn ((Dumper \%inputs) . "\n");
     if(%{$self->bams} eq 0) {
         die "No BAMs have been loaded yet in assess_str_reads.";
+    }
+    if($out_id && %{$self->bams} > 1) {
+        die "--out_id option should only be used for a single sample - multiple input BAMs.\n";
     }
     if(1) {
         warn "Read trim static is ${read_trim_static}bp\n";
@@ -724,7 +728,7 @@ sub assess_str_reads_by_readinspect {
                     foreach my $rir (@{$strloc_ri->rep_in_read}) {
                         say join ("\t", (
                             _disease_shorten($str->name),
-                            $sample,
+                            $out_id // $sample,
                             $rir->a,
                             $rir->b,
                             $rir->c,
@@ -736,7 +740,7 @@ sub assess_str_reads_by_readinspect {
                     foreach my $scr (@{$strloc_ri->score}) {
                         say join ("\t", (
                             _disease_shorten($str->name),
-                            $sample,
+                            $out_id // $sample,
                             $scr->repeat_starts,
                             $scr->mlength,
                             $scr->bam_read->qual,

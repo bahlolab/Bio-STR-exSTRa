@@ -59,3 +59,14 @@ Either use the file where the R package is installed, or download directly: [rep
 
 See [`examples/run_strexpansion_score.sh`](examples/run_strexpansion_score.sh) for an example of running the script [`bin/exSTRa_score.pl`](bin/exSTRa_score.pl) that can be modified to your data. 
 The Docker container has `exSTRa_score.pl` as an executable command. 
+
+## Options
+
+    --out_id STRING
+
+        Specify a custom name in the output column instead of using the Sample name in the BAM file. Can only be used when loading one BAM.
+
+    --no_read_name
+
+        When this option is set, no read ID is given in the output, making for smaller output files.
+
