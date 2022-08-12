@@ -21,7 +21,7 @@ A Docker container is available for the most common use of this package.
 This can make the installation process easier. 
 
 Instructions for the Docker container are at
-https://hub.docker.com/r/ricktankard/bio-str-exstra
+https://hub.docker.com/r/bahlolab/bio-str-exstra
 
 ## Perl library install
 
