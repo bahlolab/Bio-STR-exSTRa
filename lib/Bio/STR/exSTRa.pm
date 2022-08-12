@@ -683,7 +683,7 @@ sub assess_str_reads_by_readinspect {
     my $read_trim_static = $inputs{read_trim_static} // 10; # how many bp to trim reads from both ends in qualloc
     my $print_only = $inputs{print_only} // 0;
     my $print_read_name = $inputs{print_read_name} // 1;
-    my $out_id = $inputs{out_id} // ''; # Alternative output ID
+    my $out_id = $inputs{out_id}; # Alternative output ID
     warn "The options to assess_str_reads_by_readinspect are:\n";
     warn ((Dumper \%inputs) . "\n");
     if(%{$self->bams} eq 0) {

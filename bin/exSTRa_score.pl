@@ -46,7 +46,7 @@ my $outer_bases = 2000;
 my $debug = '';
 my $assess_by_alignment = '';
 my $trim = 0;
-my $out_id = '';
+my $out_id = undef;
 my $no_read_name = '';
 GetOptions (
     "outer_bases=i" => \$outer_bases, 
