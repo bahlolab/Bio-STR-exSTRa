@@ -38,7 +38,7 @@ jobs:
           && sudo make install 
           && cd 
           && rm -fr htslib-1.9 htslib-1.9.tar.bz2 
-          && cpanm Bio::DB::HTS 
+          && cpanm --force Bio::DB::HTS 
           && rm -fr root/.cpanm
       - name: Install CPAN dependencies
         run: cpanm --installdeps .
