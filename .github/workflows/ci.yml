@@ -46,3 +46,8 @@ jobs:
         run: cpanm --installdeps .
       - name: run tests
         run: prove -lv t
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: CPANM work directory
+          path: /home/runner/.cpanm/work
