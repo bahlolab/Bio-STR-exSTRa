@@ -35,7 +35,7 @@ jobs:
           && cd htslib-1.9 
           && ./configure 
           && make 
-          && make install 
+          && sudo make install 
           && cd 
           && rm -fr htslib-1.9 htslib-1.9.tar.bz2 
           && cpanm Bio::DB::HTS 
