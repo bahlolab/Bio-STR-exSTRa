@@ -27,7 +27,7 @@ jobs:
       
       - name: Setup Perl environment
         uses: shogo82148/actions-setup-perl@v1
-          with:
-            perl-version: '5.34'
+        with:
+          perl-version: '5.34'
       - run: cpanm --installdeps .
       - run: prove -lv t
