@@ -30,7 +30,7 @@ jobs:
         with:
           perl-version: '5.22'
       - name: Install DB_File
-        run: cpanm --force DB_File && cat /home/runner/.cpanm/work/*/build.log
+        run: cpanm --force DB_File || cat /home/runner/.cpanm/work/*/build.log
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
