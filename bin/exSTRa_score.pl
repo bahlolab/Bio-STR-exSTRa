@@ -18,6 +18,14 @@ perl exSTRa_score.pl $bahlolab_db/hg19/standard_gatk/hg19.fa ../disorders/repeat
 
 perl exSTRa_score.pl --by_alignment $bahlolab_db/hg19/standard_gatk/hg19.fa ../disorders/repeat_disorders.txt bam_links/*.bam > repeat_rediscovery_02_byalignment.txt
 
+Other options:
+
+    --out_id STRING
+        Specify a custom name in the output column instead of using the Sample name in the BAM file. Can only be used when loading one BAM.
+
+    --no_read_name
+        When this option is set, no read ID is given in the output, making for smaller output files.
+
 =cut
 
 use 5.014;
@@ -38,12 +46,17 @@ my $outer_bases = 2000;
 my $debug = '';
 my $assess_by_alignment = '';
 my $trim = 0;
+my $out_id = undef;
+my $no_read_name = '';
 GetOptions (
     "outer_bases=i" => \$outer_bases, 
     "debug" => \$debug,
     'by_alignment' => \$assess_by_alignment,
-    'trim=i' => \$trim,,
+    'trim=i' => \$trim,
+    'out_id=s' => \$out_id,
+    'no_read_name' => \$no_read_name,
 ) or die("Error in command line arguments\n");
+my $print_read_name = not $no_read_name;
 my $reference = shift @ARGV;
 my $repeat_database = shift @ARGV;
 my @bam_files = @ARGV;
@@ -157,7 +170,13 @@ $strs->read_bams_array(\@bam_files); # , (-expand_flags  => 1)); # may need to r
 if($assess_by_alignment) {
     $strs->assess_str_reads_by_alignment;
 } else {
-    $strs->assess_str_reads(read_trim_static => $trim, give_score => 1, print_only => 1);
+    $strs->assess_str_reads(
+        read_trim_static => $trim, 
+        give_score => 1, 
+        print_only => 1, 
+        out_id => $out_id,
+        print_read_name => $print_read_name,
+    );
 }
 # $strs->all_counts_give;
 
